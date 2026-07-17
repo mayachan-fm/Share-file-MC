@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MC Addon Share</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="dekorasi-atas"></div>
+
+<header class="header">
+    <div class="container">
+        <div class="logo">
+            <i class="fa fa-cubes"></i>
+            <div>
+                <h1>MC ADDON SHARE</h1>
+                <p>Kumpulan Addon Minecraft</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="intro">
+    <div class="container">
+        <h2>Koleksi Addon & Mod</h2>
+        <p>Dukungan jika tidak keberatan <b>https://saweria.co/Yuki58</b></p>
+
+        <!-- Filter Kategori -->
+        <div class="filter-kategori">
+            <button class="btn-kategori aktif" data-filter="semua">Semua</button>
+            <button class="btn-kategori" data-filter="addon">Addon / Mod</button>
+            <button class="btn-kategori" data-filter="resource">Resource Pack</button>
+            <button class="btn-kategori" data-filter="peta">Peta Dunia</button>
+            <button class="btn-kategori" data-filter="lainnya">Lainnya</button>
+        </div>
+
+        <!-- Kotak Pencarian -->
+        <div class="pencarian">
+            <input type="text" id="kotak-cari" placeholder="Cari nama addon/mod..." oninput="cariAddon()">
+            <i class="fa fa-search ikon-cari"></i>
+        </div>
+    </div>
+</section>
+
+<section class="daftar-addon">
+    <div class="container">
+        <div id="wadah-addon">
+            <div class="pesan-kosong">
+                <i class="fa fa-folder-open"></i>
+                <p>Belum ada addon</p>
+                <span>Silakan isi data di file <code>data.json</code></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2026 MC Addon Share</p>
+    </div>
+</footer>
+
+<!-- Notifikasi Salin Link -->
+<div id="notif-salin" class="notifikasi">✅ Link disalin ke papan klip!</div>
+
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="script.js"></script>
+</body>
+</html>
