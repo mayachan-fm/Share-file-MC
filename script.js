@@ -1,3 +1,23 @@
+// ==============================================
+// KONFIGURASI FIREBASE (JANGAN DIUBAH BAGIAN INI)
+// ==============================================
+const firebaseConfig = {
+  apiKey: "AIzaSyD9iPg5KJKlwEiTr7SMjAVTnca9XzGvv2M",
+  authDomain: "share-addon.firebaseapp.com",
+  databaseURL: "https://share-addon-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "share-addon",
+  storageBucket: "share-addon.firebasestorage.app",
+  messagingSenderId: "822096958816",
+  appId: "1:822096958816:web:3a296039adf1ed861b3a05"
+};
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+// ==============================================
+
 let semuaDataAddon = [];
 let filterAktif = 'semua';
 
@@ -6,14 +26,29 @@ async function tampilkanAddon() {
     const wadah = document.getElementById('wadah-addon');
     try {
         const respon = await fetch('data.json');
+        if (!respon.ok) throw new Error("File tidak ditemukan");
         semuaDataAddon = await respon.json();
+        
+        // Ambil data Firebase jika berhasil
+        try {
+            const unduhRef = ref(db, 'jumlah_unduh');
+            const snapshot = await get(unduhRef);
+            const dataUnduh = snapshot.exists() ? snapshot.val() : {};
+            semuaDataAddon.forEach((item, indeks) => {
+                item['jumlah unduh'] = dataUnduh[indeks] || item['jumlah unduh'] || 0;
+            });
+        } catch (firebaseErr) {
+            console.warn("Data Firebase tidak dimuat, pakai nilai awal:", firebaseErr);
+        }
+
         wadah.innerHTML = '';
         tampilkanDaftar(semuaDataAddon);
         aturFilterKategori();
     } catch (error) {
-        wadah.innerHTML = `<div class="pesan-kosong"><i class="fa fa-exclamation-triangle"></i><p>Belum bisa memuat data</p><span>Pastikan file <code>data.json</code> ada & formatnya benar</span></div>`;
+        wadah.innerHTML = `<div class="pesan-kosong"><i class="fa fa-exclamation-triangle"></i><p>Belum bisa memuat data</p><span>Pastikan file <code>data.json</code> ada & formatnya benar</span><br><small>Detail: ${error.message}</small></div>`;
     }
 }
+
 
 // Tampilkan daftar kartu
 function tampilkanDaftar(dataYangDitampilkan) {
@@ -40,6 +75,11 @@ function tampilkanDaftar(dataYangDitampilkan) {
                     <i class="fa fa-link"></i>
                 </button>
                 <img src="${item['link gambar']}" alt="${item['nama file']}" class="kartu-gambar" loading="lazy" onerror="this.src='https://via.placeholder.com/400x180/5D9C41/ffffff?text=Gambar+Tidak+Ada'">
+                <!-- Ikon & Jumlah Unduh -->
+                <div class="info-unduh">
+                    <i class="fa fa-download"></i>
+                    <span>${item['jumlah unduh'] || 0}</span>
+                </div>
             </div>
             <div class="kartu-isi">
                 <h3>${item['nama file']}</h3>
@@ -107,3 +147,4 @@ function salinLink(link) {
 }
 
 document.addEventListener('DOMContentLoaded', tampilkanAddon);
+                                             
