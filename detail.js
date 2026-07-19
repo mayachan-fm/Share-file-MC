@@ -1,3 +1,23 @@
+// ==============================================
+// KONFIGURASI FIREBASE (JANGAN DIUBAH BAGIAN INI)
+// ==============================================
+const firebaseConfig = {
+  apiKey: "AIzaSyD9iPg5KJKlwEiTr7SMjAVTnca9XzGvv2M",
+  authDomain: "share-addon.firebaseapp.com",
+  databaseURL: "https://share-addon-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "share-addon",
+  storageBucket: "share-addon.firebasestorage.app",
+  messagingSenderId: "822096958816",
+  appId: "1:822096958816:web:3a296039adf1ed861b3a05"
+};
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { getDatabase, ref, get, increment, set } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+// ==============================================
+
 async function tampilkanDetail() {
     const wadah = document.getElementById('isi-detail');
     const urlParams = new URLSearchParams(window.location.search);
@@ -19,6 +39,7 @@ async function tampilkanDetail() {
         }
 
         const linkDetail = window.location.href;
+        let jumlahUnduh = item['jumlah unduh'] || 0;
 
         wadah.innerHTML = `
             <div class="kartu-detail">
@@ -28,6 +49,11 @@ async function tampilkanDetail() {
                         <div>
                             <span class="tipe-file">${item['type file'] || 'File'}</span>
                             <h2>${item['nama file']}</h2>
+                        </div>
+                        <!-- Ikon Mata & Jumlah Unduh -->
+                        <div class="detail-unduh">
+                            <i class="fa fa-eye"></i>
+                            <span>${jumlahUnduh} kali diunduh</span>
                         </div>
                     </div>
 
@@ -40,7 +66,7 @@ async function tampilkanDetail() {
                     <div class="detail-deskripsi">${item.description}</div>
 
                     <div class="tombol-aksi">
-                        <a href="${item['link download']}" target="_blank" class="tombol-unduh">
+                        <a href="${item['link download']}" target="_blank" class="tombol-unduh" data-id="${id}">
                             <i class="fa fa-download"></i> Unduh File
                         </a>
                         <button class="tombol-bagi-detail" onclick="salinLink('${linkDetail}')" title="Salin Link">
@@ -50,6 +76,19 @@ async function tampilkanDetail() {
                 </div>
             </div>
         `;
+
+        // === FUNGSI SIMPAN KE FIREBASE SECARA PERMANEN ===
+        document.querySelector('.tombol-unduh').addEventListener('click', async () => {
+            try {
+                // Tambah angka 1 & simpan langsung ke database
+                await set(ref(db, `jumlah_unduh/${id}`), increment(1));
+                jumlahUnduh++;
+                document.querySelector('.detail-unduh span').textContent = `${jumlahUnduh} kali diunduh`;
+            } catch (err) {
+                console.error('Gagal menyimpan data unduh:', err);
+                alert('Berhasil membuka unduhan, tapi data belum tersimpan. Coba lagi nanti ya!');
+            }
+        });
 
     } catch (error) {
         wadah.innerHTML = `<div class="pesan-kosong"><i class="fa fa-exclamation-triangle"></i><p>Gagal memuat data</p></div>`;
