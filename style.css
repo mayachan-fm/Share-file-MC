@@ -1,3 +1,21 @@
+.logo-situs {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-right: 12px;
+    vertical-align: middle;
+    border-radius: 12px;
+}
+
+.judul-situs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+
+
 :root {
     --mcHijau: #5D9C41;
     --mcGelap: #181818;
