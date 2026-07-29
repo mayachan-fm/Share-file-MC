@@ -438,3 +438,81 @@ body {
     color: var(--mcHijau);
     font-size: 16px;
 }
+
+
+
+/* === KARTU KHUSUS KOMENTAR === */
+.kartu-komentar {
+    background: var(--mcKartu);
+    border: 3px solid var(--mcBatas);
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 700px;
+    margin: 24px auto 0;
+}
+
+.judul-komentar {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: var(--mcHijau);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-komentar {
+    margin-bottom: 20px;
+}
+
+#input-komentar {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    background: rgba(0,0,0,0.2);
+    border: 2px solid var(--mcBatas);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+#input-komentar:focus {
+    border-color: var(--mcHijau);
+}
+
+.batas-karakter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--teksAbu);
+}
+
+.pesan-kosong-komentar {
+    text-align: center;
+    padding: 30px 10px;
+    color: var(--teksAbu);
+    font-size: 14px;
+}
+
+.isi-komentar {
+    padding: 12px;
+    border-bottom: 1px solid var(--mcBatas);
+}
+
+.isi-komentar:last-child {
+    border-bottom: none;
+}
+
+.teks-komentar {
+    font-size: 14px;
+    margin-bottom: 4px;
+    line-height: 1.6;
+}
+
+.waktu-komentar {
+    color: var(--teksAbu);
+    font-size: 12px;
+}
