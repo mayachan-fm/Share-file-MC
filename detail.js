@@ -12,18 +12,20 @@ const firebaseConfig = {
 };
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-import { getDatabase, ref, get, increment, set } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
+import { getDatabase, ref, get, increment, set, push, onValue } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-database.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 // ==============================================
 
+let idAddonSekarang = null;
+
 async function tampilkanDetail() {
     const wadah = document.getElementById('isi-detail');
     const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
+    idAddonSekarang = urlParams.get('id');
 
-    if (id === null) {
+    if (idAddonSekarang === null) {
         wadah.innerHTML = `<div class="pesan-kosong"><i class="fa fa-exclamation-circle"></i><p>Addon tidak ditemukan</p></div>`;
         return;
     }
@@ -31,7 +33,7 @@ async function tampilkanDetail() {
     try {
         const respon = await fetch('data.json');
         const data = await respon.json();
-        const item = data[id];
+        const item = data[idAddonSekarang];
 
         if (!item) {
             wadah.innerHTML = `<div class="pesan-kosong"><i class="fa fa-exclamation-circle"></i><p>Data tidak ditemukan</p></div>`;
@@ -50,7 +52,6 @@ async function tampilkanDetail() {
                             <span class="tipe-file">${item['type file'] || 'File'}</span>
                             <h2>${item['nama file']}</h2>
                         </div>
-                        <!-- Ikon Mata & Jumlah Unduh -->
                         <div class="detail-unduh">
                             <i class="fa fa-eye"></i>
                             <span>${jumlahUnduh} kali diunduh</span>
@@ -66,7 +67,7 @@ async function tampilkanDetail() {
                     <div class="detail-deskripsi">${item.description}</div>
 
                     <div class="tombol-aksi">
-                        <a href="${item['link download']}" target="_blank" class="tombol-unduh" data-id="${id}">
+                        <a href="${item['link download']}" target="_blank" class="tombol-unduh" data-id="${idAddonSekarang}">
                             <i class="fa fa-download"></i> Unduh File
                         </a>
                         <button class="tombol-bagi-detail" onclick="salinLink('${linkDetail}')" title="Salin Link">
@@ -77,30 +78,91 @@ async function tampilkanDetail() {
             </div>
         `;
 
-        // === FUNGSI SIMPAN KE FIREBASE SECARA PERMANEN ===
+        // Hitung unduh
         document.querySelector('.tombol-unduh').addEventListener('click', async () => {
             try {
-                // Tambah angka 1 & simpan langsung ke database
-                await set(ref(db, `jumlah_unduh/${id}`), increment(1));
+                await set(ref(db, `jumlah_unduh/${idAddonSekarang}`), increment(1));
                 jumlahUnduh++;
                 document.querySelector('.detail-unduh span').textContent = `${jumlahUnduh} kali diunduh`;
             } catch (err) {
                 console.error('Gagal menyimpan data unduh:', err);
-                alert('Berhasil membuka unduhan, tapi data belum tersimpan. Coba lagi nanti ya!');
             }
         });
+
+        // === FUNGSI KOMENTAR ===
+        siapkanKomentar();
 
     } catch (error) {
         wadah.innerHTML = `<div class="pesan-kosong"><i class="fa fa-exclamation-triangle"></i><p>Gagal memuat data</p></div>`;
     }
 }
 
+function siapkanKomentar() {
+    const inputKomen = document.getElementById('input-komentar');
+    const tombolKirim = document.getElementById('tombol-kirim');
+    const jumlahKarakter = document.getElementById('jumlah-karakter');
+
+    // Hitung sisa karakter
+    inputKomen.addEventListener('input', () => {
+        jumlahKarakter.textContent = `${inputKomen.value.length}/300`;
+    });
+
+    // Kirim komentar
+    tombolKirim.addEventListener('click', async () => {
+        const isi = inputKomen.value.trim();
+        if (!isi) return;
+
+        try {
+            await push(ref(db, `komentar/${idAddonSekarang}`), {
+                isi: isi,
+                waktu: Date.now()
+            });
+            inputKomen.value = '';
+            jumlahKarakter.textContent = '0/300';
+            tampilkanNotif('notif-komen');
+        } catch (err) {
+            console.error('Gagal kirim komentar:', err);
+            alert('Gagal mengirim komentar, coba lagi nanti!');
+        }
+    });
+
+    // Tampilkan komentar otomatis
+    onValue(ref(db, `komentar/${idAddonSekarang}`), (snapshot) => {
+        const daftar = document.getElementById('daftar-komentar');
+        const data = snapshot.val();
+
+        if (!data) {
+            daftar.innerHTML = `<div class="pesan-kosong-komentar">Belum ada komentar, jadilah yang pertama!</div>`;
+            return;
+        }
+
+        let html = '';
+        const urutkan = Object.values(data).sort((a,b) => b.waktu - a.waktu);
+        urutkan.forEach(komen => {
+            const tgl = new Date(komen.waktu);
+            const waktuTampil = `${tgl.getDate()} ${tgl.toLocaleString('id-ID', {month:'long'})} ${tgl.getFullYear()} pukul ${tgl.getHours().toString().padStart(2,'0')}:${tgl.getMinutes().toString().padStart(2,'0')}`;
+            html += `
+                <div class="isi-komentar">
+                    <p class="teks-komentar">${komen.isi}</p>
+                    <small class="waktu-komentar">${waktuTampil}</small>
+                </div>
+            `;
+        });
+        daftar.innerHTML = html;
+    });
+}
+
+function tampilkanNotif(id) {
+    const notif = document.getElementById(id);
+    notif.classList.add('tampil');
+    setTimeout(() => notif.classList.remove('tampil'), 2500);
+}
+
 function salinLink(link) {
     navigator.clipboard.writeText(link).then(() => {
-        const notif = document.getElementById('notif-salin');
-        notif.classList.add('tampil');
-        setTimeout(() => notif.classList.remove('tampil'), 2500);
+        tampilkanNotif('notif-salin');
     });
 }
 
 document.addEventListener('DOMContentLoaded', tampilkanDetail);
+            
