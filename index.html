@@ -5,39 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MC Addon Share</title>
     <link rel="stylesheet" href="style.css">
-        <!-- Ikon Tab Browser -->
     <link rel="icon" href="logo.png" type="image/png">
-    <!-- Gambar Saat Dibagikan -->
     <meta property="og:image" content="situs-logo.png">
     <meta property="og:title" content="Kumpulan Addon Minecraft">
     <meta property="og:description" content="Koleksi Addon & Mod Minecraft Bedrock terlengkap">
 </head>
 <body>
-    <div class="judul-situs">
-      <img src="situs-logo.png" alt="Situs Logo" class="situs-logo">
-      <h1>Kumpulan Addon Minecraft</h1>
+
+<!-- BAGIAN UTAMA SAMBUTAN -->
+<section class="bagian-sambutan">
+    <div class="latar-gambar"></div>
+    <div class="isi-sambutan">
+        <h1>Selamat Datang di MC Addon Share</h1>
+        <p>Kumpulan addon, mod, paket sumber daya, dan peta dunia Minecraft terlengkap</p>
     </div>
+</section>
 
-<div class="dekorasi-atas"></div>
-
-<header class="header">
+<!-- BAGIAN INFO UTAMA -->
+<section class="info-utama">
     <div class="container">
-        <div class="logo">
+        <div class="kotak-info">
             <i class="fa fa-cubes"></i>
             <div>
-                <h1>MC ADDON SHARE</h1>
-                <p>Kumpulan Addon Minecraft</p>
+                <span id="jumlah-total">0</span>
+                <p>Total Addon</p>
+            </div>
+        </div>
+        <div class="kotak-info">
+            <i class="fa fa-download"></i>
+            <div>
+                <span id="jumlah-unduh-total">0</span>
+                <p>Total Unduhan</p>
             </div>
         </div>
     </div>
-</header>
+</section>
 
-<section class="intro">
+<!-- BAGIAN PENCARIAN & KATEGORI -->
+<section class="bagian-filter">
     <div class="container">
-        <h2>Koleksi Addon & Mod</h2>
-        <p>Dukungan jika tidak keberatan <b>https://saweria.co/Yuki58</b></p>
+        <div class="pencarian">
+            <input type="text" id="kotak-cari" placeholder="Cari nama addon/mod...">
+            <button class="tombol-cari" id="tombol-cari">
+                <i class="fa fa-arrow-right"></i>
+            </button>
+        </div>
 
-        <!-- Filter Kategori -->
         <div class="filter-kategori">
             <button class="btn-kategori aktif" data-filter="semua">Semua</button>
             <button class="btn-kategori" data-filter="addon">Addon / Mod</button>
@@ -45,15 +58,10 @@
             <button class="btn-kategori" data-filter="peta">Peta Dunia</button>
             <button class="btn-kategori" data-filter="lainnya">Lainnya</button>
         </div>
-
-        <!-- Kotak Pencarian -->
-        <div class="pencarian">
-            <input type="text" id="kotak-cari" placeholder="Cari nama addon/mod..." oninput="cariAddon()">
-            <i class="fa fa-search ikon-cari"></i>
-        </div>
     </div>
 </section>
 
+<!-- DAFTAR ADDON -->
 <section class="daftar-addon">
     <div class="container">
         <div id="wadah-addon">
@@ -72,7 +80,6 @@
     </div>
 </footer>
 
-<!-- Notifikasi Salin Link -->
 <div id="notif-salin" class="notifikasi">✅ Link disalin ke papan klip!</div>
 
 <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
