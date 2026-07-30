@@ -13,9 +13,6 @@
     gap: 10px;
 }
 
-
-
-
 :root {
     --mcHijau: #5D9C41;
     --mcGelap: #181818;
@@ -197,7 +194,9 @@ body {
     font-family: monospace;
 }
 
-/* Kartu Addon */
+/* ==============================================
+   KARTU ADDON (SUDAH DIPERBAIKI SESUAI PERMINTAAN)
+   ============================================== */
 .kartu-addon {
     background: var(--mcKartu);
     border: 3px solid var(--mcBatas);
@@ -205,7 +204,6 @@ body {
     overflow: hidden;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
-    position: relative;
 }
 
 .kartu-addon:hover {
@@ -230,27 +228,6 @@ body {
     z-index: 2;
 }
 
-.tombol-bagi {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: rgba(0,0,0,0.6);
-    color: #fff;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 3;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-.tombol-bagi:hover {
-    background: var(--mcHijau);
-}
-
 .kartu-gambar {
     width: 100%;
     height: 180px;
@@ -259,18 +236,78 @@ body {
 }
 
 .kartu-isi {
-    padding: 20px;
+    padding: 16px;
 }
 
 .kartu-isi h3 {
     font-size: 18px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
-.kartu-isi p {
-    font-size: 14px;
+.garis-pembatas {
+    width: 100%;
+    height: 1px;
+    background: var(--mcBatas);
+    margin-bottom: 12px;
+}
+
+.bagian-aksi {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.info-unduh {
+    display: flex;
+    align-items: center;
+    gap: 4px;
     color: var(--teksAbu);
-    line-height: 1.6;
+    font-size: 13px;
+}
+
+.info-unduh i {
+    color: var(--mcHijau);
+}
+
+.grup-tombol-kanan {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tombol-like, .tombol-bagi {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.tombol-like {
+    background: rgba(0,0,0,0.5);
+    color: var(--teksAbu);
+}
+
+.tombol-like.sudah {
+    background: rgba(93, 156, 65, 0.25);
+    color: var(--mcHijau);
+}
+
+.tombol-bagi {
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+}
+
+.tombol-like:hover, .tombol-bagi:hover {
+    background: var(--mcHijau);
+    color: #fff;
 }
 
 /* Halaman Detail */
@@ -336,6 +373,20 @@ body {
     margin-bottom: 24px;
     color: var(--teksAbu);
     line-height: 1.7;
+}
+
+.detail-unduh {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--teksAbu);
+    margin-top: 8px;
+}
+
+.detail-unduh i {
+    color: var(--mcHijau);
+    font-size: 16px;
 }
 
 .tombol-aksi {
@@ -405,41 +456,6 @@ body {
     color: var(--teksAbu);
     font-size: 14px;
 }
-
-
-.info-unduh {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    background: rgba(0,0,0,0.7);
-    color: #fff;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    z-index: 2;
-}
-
-.info-unduh i {
-    color: var(--mcHijau);
-}
-.detail-unduh {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    color: var(--teksAbu);
-    margin-top: 8px;
-}
-
-.detail-unduh i {
-    color: var(--mcHijau);
-    font-size: 16px;
-}
-
-
 
 /* === KARTU KHUSUS KOMENTAR === */
 .kartu-komentar {
